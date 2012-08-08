@@ -627,23 +627,18 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				// field-level-conf
 				$this->fillCObjData($fieldsConf[$field . '.']['fields.']);
 
-				// ###PRICE###
-				if ($field == 'price') {
-					$value = number_format(str_replace(',', '.', $value), 2, ',', '.');
-				}
-
 				// ###SUBCATEGORIES###
 				if ($field == 'subcategories') {
 					$value = '';
 					$where = 'category = ' . $fieldsConf['uid'] . ' AND ' . 'pid IN (' . $this->pids . ') ' . $this->cObj->enableFields('tx_multicatalog_category');
 					$subcategories = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_category', $where, '', 'sorting ASC');
 					foreach ($subcategories as $subcategory) {
-						$tmpFConf = array(
+						$subcategoryFieldConf = array(
 							'name.' => array(
 								'link' => 1
 							)
 						);
-						$subcategoryMarkers = $this->recordAndFieldsConfToMarkerArray($subcategory, $tmpFConf);
+						$subcategoryMarkers = $this->recordAndFieldsConfToMarkerArray($subcategory, $subcategoryFieldConf);
 						$value .= '<li>' . $subcategoryMarkers['###NAME###'] . '</li>';
 					}
 					$value = '<ul class="categories">' . $value . '</ul>';
