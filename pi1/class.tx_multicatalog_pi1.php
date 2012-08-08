@@ -468,7 +468,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * All fields in tx_multicatalog_product are available as markers for the template.
 	 * E.g. the uid is available as ###UID###. But also fields that come from other Extensions are available.
 	 * Assume you have a field tx_multicatalogdatasheet_sheet added by another extension, the field will be
-	 * available as ###TX_MULTICATALOGDATASHEET_SHEET###. That makes extening this extension very easy! Just
+	 * available as ###TX_MULTICATALOGDATASHEET_SHEET###. That makes extending this extension very easy! Just
 	 * add the field to the database and you can instantly use it in the template.
 	 * If you're working with articles, the same rules apply for them.
 	 *
