@@ -152,7 +152,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		 * Flexform overrides TS setting
 		 */
 		$ff_templateFile = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'templateFile', 'sDEF');
-		$templateFile = $ff_templateFile ? $ff_templateFile : $this->conf['template'];
+		$templateFile = $ff_templateFile ? $ff_templateFile : $this->cObj->stdWrap($this->conf['template'], $this->conf['template'] . '.');
 		$this->template = $this->cObj->fileResource($templateFile);
 		$this->articletemplate = $this->cObj->getSubpart($this->template, '###ARTICLE###');
 		$this->categorytemplate = $this->cObj->getSubpart($this->template, '###CATEGORY_LIST###');
