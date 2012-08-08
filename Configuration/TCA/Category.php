@@ -73,25 +73,23 @@ $TCA['tx_multicatalog_category'] = array (
 	)
 );
 
-global $TYPO3_CONF_VARS;
-$_EXTCONF = unserialize($TYPO3_CONF_VARS['EXT']['extConf']['multicatalog']);
+$_EXTCONF = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['multicatalog']);
 if($_EXTCONF['hierachical_categories']) {
 	
 	$TCA['tx_multicatalog_category']['ctrl']['useColumnsForDefaultValues'] = 'category';
-	
+
 	$tempColumns = array (
-		'category' => array (		
-			'exclude' => 0,		
-			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_category.category',		
+		'category' => array (
+			'label' => 'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_category.category',
 			'config' => array (
 				'type' => 'select',
 				'items' => array(
 					array('', '')
 				),
 				// TODO: Implement user func to display oiginal language id's but current language labels
-				'foreign_table' => 'tx_multicatalog_category',    
-                'foreign_table_where' => 'AND tx_multicatalog_category.pid=###CURRENT_PID### AND tx_multicatalog_category.category=0 AND sys_language_uid = 0 ORDER BY tx_multicatalog_category.name',    
-                'size' => 1,    
+				'foreign_table' => 'tx_multicatalog_category',
+                'foreign_table_where' => 'AND tx_multicatalog_category.pid=###CURRENT_PID### AND tx_multicatalog_category.category=0 AND sys_language_uid = 0 ORDER BY tx_multicatalog_category.name',
+                'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1,
 			)

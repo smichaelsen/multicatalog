@@ -21,6 +21,7 @@
 			<label index="tx_multicatalog_product.articles">Articles</label>
 			<label index="tx_multicatalog_product.category">Category</label>
 			<label index="tx_multicatalog_product.tabs.general">General</label>
+			<label index="tx_multicatalog_product.tabs.access">Access</label>
 			<label index="tx_multicatalog_product.tabs.articles">Articles</label>
 			<label index="tx_multicatalog_category">Category</label>
 			<label index="tx_multicatalog_category.name">Name</label>
@@ -44,6 +45,7 @@
 			<label index="tx_multicatalog_product.articles">Artikel</label>
 			<label index="tx_multicatalog_product.category">Kategorie</label>
 			<label index="tx_multicatalog_product.tabs.general">Allgemein</label>
+			<label index="tx_multicatalog_product.tabs.access">Zugriff</label>
 			<label index="tx_multicatalog_product.tabs.articles">Artikel</label>
 			<label index="tx_multicatalog_category">Kategorie</label>
 			<label index="tx_multicatalog_category.name">Name</label>

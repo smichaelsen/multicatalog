@@ -33,7 +33,7 @@ CREATE TABLE tx_multicatalog_product (
 	pictures_alt text,
 	price tinytext,
 	articles tinytext,
-	category tinytext,
+	category text,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)
