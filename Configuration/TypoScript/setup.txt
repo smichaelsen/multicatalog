@@ -58,6 +58,7 @@ plugin.tx_multicatalog_pi1 {
 			###BACKLINK###
 			backlink{
 				backlink = 1
+				backlink.includeCategoryParameter = 1
 				data = LLL:EXT:multicatalog/pi1/locallang.xml:backlink
 				wrap = <span class="backlink">|</span>
 			}

@@ -346,7 +346,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 
 		// If there are less than 2 pages no pagebrowser is needed
 		if ($pages < 2) {
-			return;
+			return '';
 		}
 
 		// Active Page
@@ -674,7 +674,13 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				if ($this->local_cObj->stdWrap($fieldsConf[$field . '.']['backlink'], $fieldsConf[$field . '.']['backlink.']) == 1) {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->listPid;
 
-					if ($record['category']) {
+					if (
+						$this->local_cObj->stdWrap(
+							$fieldsConf[$field . '.']['backlink.']['includeCategoryParameter'],
+							$fieldsConf[$field . '.']['backlink.']['includeCategoryParameter.']
+						) == 1 &&
+						$record['category']
+					) {
 						$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[cat]=' . $record['categoriesArray'][0];
 					}
 					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
