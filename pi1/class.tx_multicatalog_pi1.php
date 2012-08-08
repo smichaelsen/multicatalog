@@ -662,7 +662,13 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				if ($this->local_cObj->stdWrap($fieldsConf[$field . '.']['link'], $fieldsConf[$field . '.']['link.']) == 1) {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->linkTargetPid;
 					$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[' . $this->linkVarName . ']=' . $record['uid'];
-					if ($fieldsConf[$field . '.']['link.']['includeCategoryParameter'] == 1 && $this->linkVarName == 'uid') {
+					if (
+						$this->local_cObj->stdWrap(
+							$fieldsConf[$field . '.']['link.']['includeCategoryParameter'],
+							$fieldsConf[$field . '.']['link.']['includeCategoryParameter.']
+						) == 1 &&
+						$this->linkVarName == 'uid'
+					) {
 						$fieldsConf[$field . '.']['typolink.']['additionalParams'] .= '&' . $this->prefixId . '[cat]=' . $record['category'];
 					}
 					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
