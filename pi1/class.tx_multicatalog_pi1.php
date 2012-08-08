@@ -224,6 +224,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			if ($GLOBALS['TSFE']->sys_language_uid > 0) {
 				$record = $GLOBALS['TSFE']->sys_page->getRecordOverlay($table, $record, $GLOBALS['TSFE']->sys_language_uid);
 			}
+			$record['categoriesArray'] = t3lib_div::trimExplode(',', $record['category']);
 			if (!$returnArray) {
 				return $record;
 			}
@@ -669,7 +670,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 						) == 1 &&
 						$this->linkVarName == 'uid'
 					) {
-						$fieldsConf[$field . '.']['typolink.']['additionalParams'] .= '&' . $this->prefixId . '[cat]=' . $record['category'];
+						$fieldsConf[$field . '.']['typolink.']['additionalParams'] .= '&' . $this->prefixId . '[cat]=' . $record['categoriesArray'][0];
 					}
 					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
 				}
@@ -679,7 +680,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->listPid;
 
 					if ($record['category']) {
-						$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[cat]=' . $record['category'];
+						$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[cat]=' . $record['categoriesArray'][0];
 					}
 					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
 				}
