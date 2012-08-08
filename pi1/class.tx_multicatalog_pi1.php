@@ -73,13 +73,23 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	protected $restrictToCategories;
 
 	/**
+	 * @var string
+	 */
+	protected $listPid;
+
+	/**
+	 * @var string
+	 */
+	protected $recordtemplate;
+
+	/**
 	 * Main method of your PlugIn
 	 *
 	 * @param string $content The content of the PlugIn
 	 * @param array $conf The PlugIn Configuration
 	 * @return string The content that should be displayed on the website
 	 */
-	function main($content, $conf) {
+	public function main($content, $conf) {
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
@@ -97,7 +107,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	/**
 	 *
 	 */
-	function pluginConfiguration() {
+	protected function pluginConfiguration() {
 
 		/**
 		 * The current view
@@ -226,26 +236,56 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		}
 	}
 
-	function fetchLocalized($returnArray, $fields, $table, $where, $groupBy = '', $orderBy = '', $limit = '') {
+	/**
+	 * @param bool $returnArray
+	 * @param string $fields
+	 * @param string $table
+	 * @param string $where
+	 * @param string string $groupBy
+	 * @param string $orderBy
+	 * @param integer $limit
+	 * @return array
+	 */
+	protected function fetchLocalized($returnArray, $fields, $table, $where, $groupBy = '', $orderBy = '', $limit = NULL) {
 
-		$records = array();
+		if(!$returnArray) {
+			$limit = 1;
+		}
+
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where . ' AND sys_language_uid = 0', $groupBy, $orderBy, $limit);
-		while ($record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+
+		if($returnArray) {
+			$records = array();
+			while ($record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				$record = $this->fetchLocalized_localizeAndExtendRecord($record, $table);
+				$records[] = $record;
+			}
+			return $records;
+		} else {
+			$record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 			if (!$record['uid']) {
 				header('HTTP/1.1 301 Moved Permanently');
-				header('Location: ' . t3lib_div::locationHeaderUrl($this->cObj->getTypoLink_URL($this->listPid)));
+				header('Location: ' . t3lib_div::locationHeaderUrl($this->cObj->getTypoLink_URL(array('parameter' => $this->listPid))));
 				header('Connection: close');
 			}
-			if ($GLOBALS['TSFE']->sys_language_uid > 0) {
-				$record = $GLOBALS['TSFE']->sys_page->getRecordOverlay($table, $record, $GLOBALS['TSFE']->sys_language_uid);
-			}
-			$record['categoriesArray'] = t3lib_div::trimExplode(',', $record['category']);
-			if (!$returnArray) {
-				return $record;
-			}
-			$records[] = $record;
+			$record = $this->fetchLocalized_localizeAndExtendRecord($record, $table);
+			return $record;
 		}
-		return $records;
+	}
+
+	/**
+	 * @param array $record
+	 * @param string $table
+	 * @return array
+	 */
+	protected function fetchLocalized_localizeAndExtendRecord($record, $table) {
+		if ($GLOBALS['TSFE']->sys_language_uid > 0) {
+			$record = $GLOBALS['TSFE']->sys_page->getRecordOverlay($table, $record, $GLOBALS['TSFE']->sys_language_uid);
+		}
+		if (isset($record['category'])) {
+			$record['categoriesArray'] = t3lib_div::trimExplode(',', $record['category']);
+		}
+		return $record;
 	}
 
 	/**
@@ -315,7 +355,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 *
 	 * @return array Products
 	 */
-	function listView_getRecords() {
+	protected function listView_getRecords() {
 		$where =
 			'pid IN (' . $this->pids . ') ' .
 				$this->cObj->enableFields('tx_multicatalog_product');
@@ -555,8 +595,8 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * @param string $str Content to Wrap
 	 * @return string Content wrapped by div with Plugin Classes
 	 */
-	function pi_wrapInBaseClass($str) {
-		return '<div class="' . str_replace('_', '-', $this->prefixId) . ' ' . str_replace('_', '-', $this->prefixId) . '-' . $this->view . '">' . $str . '</div>';
+	function pi_wrapInBaseClass($content) {
+		return '<div class="' . str_replace('_', '-', $this->prefixId) . ' ' . str_replace('_', '-', $this->prefixId) . '-' . $this->view . '">' . $content . '</div>';
 	}
 
 	/**
@@ -596,7 +636,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * @param string $view The current view (list, single or catmenu) (defaults to $this->view)
 	 * @return array Fields Configuration
 	 */
-	function getFieldsConf($model = '', $view = '') {
+	protected function getFieldsConf($model = '', $view = '') {
 		if (!$view) {
 			$view = $this->view;
 		}
