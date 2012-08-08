@@ -58,6 +58,21 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	protected $pagebrowser;
 
 	/**
+	 * @var string
+	 */
+	protected $template;
+
+	/**
+	 * @var string
+	 */
+	protected $articletemplate;
+
+	/**
+	 * @var string List of category ids
+	 */
+	protected $restrictToCategories;
+
+	/**
 	 * Main method of your PlugIn
 	 *
 	 * @param string $content The content of the PlugIn
@@ -112,10 +127,10 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		 * 3. Current FE Pid
 		 */
 		$TS_storagePid = $this->cObj->stdWrap($this->conf['storagePids'], $this->conf['storagePids.']);
-		$TS_recursive = $this->cObj->stdWrap($this->conf['storagePids.']['recursive'], $this->conf['storagePids.']['recursive.']);
 		if ($this->cObj->data['pages']) {
 			$this->pids = $this->pi_getPidList($this->cObj->data['pages'], $this->cObj->data['recursive']);
 		} elseif ($TS_storagePid) {
+			$TS_recursive = $this->cObj->stdWrap($this->conf['storagePids.']['recursive'], $this->conf['storagePids.']['recursive.']);
 			$this->pids = $this->pi_getPidList($TS_storagePid, $TS_recursive);
 		} else {
 			$this->pids = $GLOBALS['TSFE']->id;
@@ -124,13 +139,13 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		/**
 		 * Restrict to Categories
 		 */
-		$ff_restrictToCategories = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restrictToCategories', 'sDEF');
+		$ff_restrictToCategories = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restrictToCategories');
 		$this->restrictToCategories = $ff_restrictToCategories ? $ff_restrictToCategories : $this->cObj->stdWrap($this->conf['list.']['restrictToCategories'], $this->conf['list.']['restrictToCategories.']);
 
 		/**
 		 * Restrict to Products
 		 */
-		$ff_restrictToProducts = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restrictToProducts', 'sDEF');
+		$ff_restrictToProducts = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restrictToProducts');
 		$this->restrictToProducts = $ff_restrictToProducts ? $ff_restrictToProducts : $this->cObj->stdWrap($this->conf['list.']['restrictToProducts'], $this->conf['list.']['restrictToProducts.']);
 
 		/**
@@ -342,7 +357,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * @param integer $pages
 	 * @return string
 	 */
-	function pagebrowser($pages) {
+	protected function pagebrowser($pages) {
 
 		// If there are less than 2 pages no pagebrowser is needed
 		if ($pages < 2) {
@@ -427,6 +442,10 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		$markerArray = $this->recordAndFieldsConfToMarkerArray(array(), $this->getFieldsConf());
 
 		$where = 'category = 0 AND ' . 'pid IN (' . $this->pids . ') ' . $this->cObj->enableFields('tx_multicatalog_category');
+		if ($this->restrictToCategories) {
+			$where .= ' AND uid IN (' . $this->restrictToCategories . ')';
+		}
+
 		$categories = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_category', $where, '', 'sorting ASC');
 
 		foreach ($categories as $category) {
