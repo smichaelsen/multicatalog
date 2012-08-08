@@ -112,7 +112,8 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		/**
 		 * The current view
 		 */
-		$this->view = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'view', 'sDEF');
+		$ff_view = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'view');
+		$this->view = $ff_view ? $ff_view : $this->cObj->stdWrap($this->conf['view'], $this->conf['view.']);
 		if (!t3lib_div::inList('single,list,catmenu', $this->view)) {
 			$this->view = 'list';
 		}
