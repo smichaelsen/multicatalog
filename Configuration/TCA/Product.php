@@ -177,12 +177,19 @@ $TCA['tx_multicatalog_product'] = array(
 				'maxitems' => 99,
 			)
 		),
+		'highlight' => array(
+			'label' =>'LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_product.highlight',
+			'config' => array(
+				'type' => 'check'
+			)
+		)
 	),
 	'types' => array(
 		'0' => array('showitem' => '
 			--div--;LLL:EXT:multicatalog/Resources/Private/Language/locallang_db.xml:tx_multicatalog_product.tabs.general,
 				sys_language_uid;;2,
 				code, title;;;;2-2-2,
+				highlight,
 				description;;;richtext[]:rte_transform[imgpath=uploads/tx_multicatalog/rte/];3-3-3,
 				pictures,
 				pictures_alt,

@@ -34,6 +34,7 @@ CREATE TABLE tx_multicatalog_product (
 	price tinytext,
 	articles tinytext,
 	category text,
+	highlight tinyint(4) DEFAULT '0' NOT NULL,
 	
 	PRIMARY KEY (uid),
 	KEY parent (pid)

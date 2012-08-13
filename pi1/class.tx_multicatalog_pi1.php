@@ -329,12 +329,14 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 
 		if (count($records)) {
 			$i = 0;
+			$productsListConfiguration = $this->getFieldsConf('product', 'list');
 			foreach ($records as $record) {
 				if (
 					$i >= ($this->pagebrowser['perPage'] * $page) &&
 					$i < ($this->pagebrowser['perPage'] * ($page + 1))
 				) {
-					$markerArray['###RECORDS###'] .= $this->renderRecord($record, $this->getFieldsConf('product'), $this->recordtemplate);
+					$singleRecord = $this->renderRecord($record, $productsListConfiguration, $this->recordtemplate);
+					$markerArray['###RECORDS###'] .= $this->cObj->stdWrap($singleRecord, $this->conf['list.']['singleStdWrap.']);
 				}
 				$i++;
 			}
@@ -344,10 +346,12 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$markerArray['###PAGEBROWSER###'] = '';
 		}
 
-		return $this->cObj->substituteMarkerArray(
+		$content = $this->cObj->substituteMarkerArray(
 			$this->cObj->getSubpart($this->template, '###LISTVIEW###'),
 			$markerArray
 		);
+
+		return $this->cObj->stdWrap($content, $this->conf['list.']['stdWrap.']);
 
 	}
 
@@ -593,7 +597,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * Custom implementation of tslib_pibase::pi_wrapInBaseClass
 	 * Adds the current view as class
 	 *
-	 * @param string $str Content to Wrap
+	 * @param string $content Content to Wrap
 	 * @return string Content wrapped by div with Plugin Classes
 	 */
 	function pi_wrapInBaseClass($content) {

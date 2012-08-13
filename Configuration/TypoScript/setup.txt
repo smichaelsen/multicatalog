@@ -50,6 +50,20 @@ plugin.tx_multicatalog_pi1 {
 			title.link.includeCategoryParameter = 1
 		  
 		}
+
+		stdWrap {
+			wrap.cObject = COA
+			wrap.cObject {
+				10 = TEXT
+				10.value = <li
+				20 = TEXT
+				20.value = class="highlight"
+				20.noTrimWrap = | ||
+				20.if.isTrue.field = highlight
+				30 = TEXT
+				30.value = >|</li>
+			}
+		}
 	}
 	
 	single{
