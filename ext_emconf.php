@@ -3,7 +3,7 @@
 ########################################################################
 # Extension Manager/Repository config file for ext "multicatalog".
 #
-# Auto generated 13-08-2012 09:44
+# Auto generated 13-08-2012 10:20
 #
 # Manual updates:
 # Only the data in the array - everything else is removed by next
@@ -15,7 +15,7 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'Extensible Product Catalog',
 	'category' => 'plugin',
 	'shy' => 0,
-	'version' => '0.7.3',
+	'version' => '0.7.4',
 	'dependencies' => '',
 	'conflicts' => '',
 	'priority' => '',

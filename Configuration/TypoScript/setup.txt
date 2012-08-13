@@ -51,7 +51,7 @@ plugin.tx_multicatalog_pi1 {
 		  
 		}
 
-		stdWrap {
+		singleStdWrap {
 			wrap.cObject = COA
 			wrap.cObject {
 				10 = TEXT
