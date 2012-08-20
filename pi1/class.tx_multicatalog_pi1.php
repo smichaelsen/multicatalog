@@ -336,7 +336,8 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 					$i < ($this->pagebrowser['perPage'] * ($page + 1))
 				) {
 					$singleRecord = $this->renderRecord($record, $productsListConfiguration, $this->recordtemplate);
-					$markerArray['###RECORDS###'] .= $this->cObj->stdWrap($singleRecord, $this->conf['list.']['singleStdWrap.']);
+					$this->fillCObjData($record);
+					$markerArray['###RECORDS###'] .= $this->local_cObj->stdWrap($singleRecord, $this->conf['list.']['singleStdWrap.']);
 				}
 				$i++;
 			}
