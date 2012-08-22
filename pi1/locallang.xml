@@ -9,6 +9,7 @@
 			<label index="backlink">Back to List</label>
 			<label index="ff_listPid">List Page</label>
 			<label index="ff_restrictToCategories">Restrict to following categories</label>
+			<label index="ff_restrictToHighlighted">Show only highlighted products</label>
 			<label index="ff_restrictToProducts">Restrict to following products</label>
 			<label index="ff_singlePid">Single Page</label>
 			<label index="ff_templateFile">Template File</label>
@@ -23,6 +24,7 @@
 			<label index="backlink">Zur Listenansicht</label>
 			<label index="ff_listPid">List Page</label>
 			<label index="ff_restrictToCategories">Auf folgende Kategorien beschränken</label>
+            <label index="ff_restrictToHighlighted">Nur Highlight-Produkte anzeigen</label>
 			<label index="ff_restrictToProducts">Nur folgende Produkte anzeigen</label>
 			<label index="ff_singlePid">Single Page</label>
 			<label index="ff_templateFile">Template Datei</label>
