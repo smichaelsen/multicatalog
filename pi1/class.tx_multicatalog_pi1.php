@@ -605,6 +605,12 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			foreach ($this->recordAndFieldsConfToMarkerArray($category, $this->getFieldsConf('category')) as $marker => $value) {
 				$markerArray[str_replace('xXx###', '###CATEGORY_', 'xXx' . $marker)] = $value;
 			}
+		} else {
+			// fill category field markers with empty strings
+			t3lib_div::loadTCA('tx_multicatalog_category');
+			foreach(array_keys($GLOBALS['TCA']['tx_multicatalog_category']['columns']) as $fieldName) {
+				$markerArray['###CATEGORY_' . strtoupper($fieldName) . '###'] = '';
+			}
 		}
 		return $this->cObj->substituteMarkerArray($template, $markerArray);
 	}
