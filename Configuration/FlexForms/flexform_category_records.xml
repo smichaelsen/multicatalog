@@ -95,6 +95,19 @@
 							</config>
 						</TCEforms>
 					</restrictToProducts>
+                    <restrictToHighlighted>
+                        <TCEforms>
+                            <label>LLL:EXT:multicatalog/pi1/locallang.xml:ff_restrictToHighlighted</label>
+                            <config>
+                                <type>check</type>
+                                <items type="array">
+                                    <numIndex index="0" type="array">
+                                        <numIndex index="0">LLL:EXT:multicatalog/pi1/locallang.xml:ff_restrictToHighlighted</numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                        </TCEforms>
+                    </restrictToHighlighted>
 				</el>
 			</ROOT>
 		</sDEF>

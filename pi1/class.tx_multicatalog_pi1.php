@@ -35,7 +35,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	var $prefixId = 'tx_multicatalog_pi1'; // Same as class name
 	var $scriptRelPath = 'pi1/class.tx_multicatalog_pi1.php'; // Path to this script relative to the extension dir.
 	var $extKey = 'multicatalog'; // The extension key.
-	var $pi_checkCHash = true;
+	var $pi_checkCHash = TRUE;
 
 	/**
 	 * @var array
@@ -71,6 +71,11 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * @var string List of category ids
 	 */
 	protected $restrictToCategories;
+
+	/**
+	 * @var boolean
+	 */
+	protected $restrictToHighlighted;
 
 	/**
 	 * @var string
@@ -158,6 +163,12 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		 */
 		$ff_restrictToProducts = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restrictToProducts');
 		$this->restrictToProducts = $ff_restrictToProducts ? $ff_restrictToProducts : $this->cObj->stdWrap($this->conf['list.']['restrictToProducts'], $this->conf['list.']['restrictToProducts.']);
+
+		/**
+		 * Restrict to highlighted products
+		 */
+		$ff_restrictToHighlighted = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restrictToHighlighted');
+		$this->restrictToHighlighted = (bool) ($ff_restrictToHighlighted ? $ff_restrictToHighlighted : $this->cObj->stdWrap($this->conf['list.']['restrictToHighlighted'], $this->conf['list.']['restrictToHighlighted.']));
 
 		/**
 		 * Pid the TS .link property links to.
@@ -382,6 +393,10 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 
 		if ($this->restrictToProducts) {
 			$where .= ' AND uid IN (' . $this->restrictToProducts . ')';
+		}
+
+		if ($this->restrictToHighlighted) {
+			$where .= ' AND highlight="1"';
 		}
 
 		if ($this->piVars['cat']) {
@@ -732,7 +747,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 					) {
 						$fieldsConf[$field . '.']['typolink.']['additionalParams'] .= '&' . $this->prefixId . '[cat]=' . $record['categoriesArray'][0];
 					}
-					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
+					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = TRUE;
 				}
 
 				// backlink if value.backlink = 1
@@ -748,7 +763,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 					) {
 						$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[cat]=' . $record['categoriesArray'][0];
 					}
-					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = true;
+					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = TRUE;
 				}
 
 				$markerArray['###' . strtoupper($field) . '###'] = $this->local_cObj->stdWrap(
