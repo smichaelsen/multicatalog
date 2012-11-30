@@ -59,7 +59,21 @@ class tx_multicatalog_pi1_wizicon {
 	 */
 	function includeLocalLang()	{
 		$llFile = t3lib_extMgm::extPath('multicatalog') . 'Resources/Private/Language/locallang.xml';
-		$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
+		$LOCAL_LANG = $this->parseXmlLocallangFile($llFile, $GLOBALS['LANG']->lang);
+		return $LOCAL_LANG;
+	}
+
+	/**
+	 * @param string $file
+	 * @param string $language
+	 * @return array
+	 */
+	protected function parseXmlLocallangFile($file, $language) {
+		if (version_compare(TYPO3_version, '6.0', '<')) {
+			$LOCAL_LANG = t3lib_div::readLLfile($file, $language);
+		}else {
+			$LOCAL_LANG = TYPO3\CMS\Core\Utility\GeneralUtility::readLLfile($file, $language);
+		}
 		return $LOCAL_LANG;
 	}
 	
