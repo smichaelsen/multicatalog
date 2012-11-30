@@ -68,6 +68,11 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	protected $articletemplate;
 
 	/**
+	 * @var string
+	 */
+	protected $categorytemplate;
+
+	/**
 	 * @var string List of category ids
 	 */
 	protected $restrictToCategories;
@@ -78,9 +83,34 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	protected $restrictToHighlighted;
 
 	/**
+	 * @var boolean
+	 */
+	protected $restrictToProducts;
+
+	/**
 	 * @var string
 	 */
 	protected $listPid;
+
+	/**
+	 * @var string
+	 */
+	protected $singlePid;
+
+	/**
+	 * @var string
+	 */
+	protected $linkTargetPid;
+
+	/**
+	 * @var string
+	 */
+	protected $linkVarName;
+
+	/**
+	 * @var string
+	 */
+	protected $pids;
 
 	/**
 	 * @var string
@@ -168,7 +198,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		 * Restrict to highlighted products
 		 */
 		$ff_restrictToHighlighted = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restrictToHighlighted');
-		$this->restrictToHighlighted = (bool) ($ff_restrictToHighlighted ? $ff_restrictToHighlighted : $this->cObj->stdWrap($this->conf['list.']['restrictToHighlighted'], $this->conf['list.']['restrictToHighlighted.']));
+		$this->restrictToHighlighted = (bool)($ff_restrictToHighlighted ? $ff_restrictToHighlighted : $this->cObj->stdWrap($this->conf['list.']['restrictToHighlighted'], $this->conf['list.']['restrictToHighlighted.']));
 
 		/**
 		 * Pid the TS .link property links to.
@@ -260,13 +290,13 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 */
 	protected function fetchLocalized($returnArray, $fields, $table, $where, $groupBy = '', $orderBy = '', $limit = NULL) {
 
-		if(!$returnArray) {
+		if (!$returnArray) {
 			$limit = 1;
 		}
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where . ' AND sys_language_uid = 0', $groupBy, $orderBy, $limit);
 
-		if($returnArray) {
+		if ($returnArray) {
 			$records = array();
 			while ($record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$record = $this->fetchLocalized_localizeAndExtendRecord($record, $table);
@@ -608,7 +638,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		} else {
 			// fill category field markers with empty strings
 			t3lib_div::loadTCA('tx_multicatalog_category');
-			foreach(array_keys($GLOBALS['TCA']['tx_multicatalog_category']['columns']) as $fieldName) {
+			foreach (array_keys($GLOBALS['TCA']['tx_multicatalog_category']['columns']) as $fieldName) {
 				$markerArray['###CATEGORY_' . strtoupper($fieldName) . '###'] = '';
 			}
 		}
