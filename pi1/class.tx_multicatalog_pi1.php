@@ -198,7 +198,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 		 * Restrict to highlighted products
 		 */
 		$ff_restrictToHighlighted = $this->pi_getFFvalue($this->cObj->data['pi_flexform'], 'restrictToHighlighted');
-		$this->restrictToHighlighted = (bool)($ff_restrictToHighlighted ? $ff_restrictToHighlighted : $this->cObj->stdWrap($this->conf['list.']['restrictToHighlighted'], $this->conf['list.']['restrictToHighlighted.']));
+		$this->restrictToHighlighted = (bool) ($ff_restrictToHighlighted ? $ff_restrictToHighlighted : $this->cObj->stdWrap($this->conf['list.']['restrictToHighlighted'], $this->conf['list.']['restrictToHighlighted.']));
 
 		/**
 		 * Pid the TS .link property links to.
@@ -338,10 +338,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 */
 	function singleView() {
 
-		$this->recordtemplate = $this->cObj->getSubpart(
-			$this->template,
-			'###RECORD_SINGLE###'
-		);
+		$this->recordtemplate = $this->cObj->getSubpart($this->template, '###RECORD_SINGLE###');
 
 		$record = $this->fetchLocalized(FALSE, '*', 'tx_multicatalog_product', 'uid = ' . intval($this->piVars['uid']) . $this->cObj->enableFields('tx_multicatalog_product'));
 		$content = $this->renderRecord($record, $this->getFieldsConf('product'), $this->recordtemplate);
@@ -357,10 +354,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 */
 	function listView() {
 
-		$this->recordtemplate = $this->cObj->getSubpart(
-			$this->template,
-			'###RECORD_LIST###'
-		);
+		$this->recordtemplate = $this->cObj->getSubpart($this->template, '###RECORD_LIST###');
 
 		$markerArray = $this->recordAndFieldsConfToMarkerArray(array(), $this->getFieldsConf());
 
@@ -372,9 +366,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$i = 0;
 			$productsListConfiguration = $this->getFieldsConf('product', 'list');
 			foreach ($records as $record) {
-				if (
-					$i >= ($this->pagebrowser['perPage'] * $page) &&
-					$i < ($this->pagebrowser['perPage'] * ($page + 1))
+				if ($i >= ($this->pagebrowser['perPage'] * $page) && $i < ($this->pagebrowser['perPage'] * ($page + 1))
 				) {
 					$singleRecord = $this->renderRecord($record, $productsListConfiguration, $this->recordtemplate);
 					$this->fillCObjData($record);
@@ -388,10 +380,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$markerArray['###PAGEBROWSER###'] = '';
 		}
 
-		$content = $this->cObj->substituteMarkerArray(
-			$this->cObj->getSubpart($this->template, '###LISTVIEW###'),
-			$markerArray
-		);
+		$content = $this->cObj->substituteMarkerArray($this->cObj->getSubpart($this->template, '###LISTVIEW###'), $markerArray);
 
 		return $this->cObj->stdWrap($content, $this->conf['list.']['stdWrap.']);
 
@@ -403,9 +392,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 	 * @return array Products
 	 */
 	protected function listView_getRecords() {
-		$where =
-			'pid IN (' . $this->pids . ') ' .
-				$this->cObj->enableFields('tx_multicatalog_product');
+		$where = 'pid IN (' . $this->pids . ') ' . $this->cObj->enableFields('tx_multicatalog_product');
 
 		if ($this->restrictToCategories) {
 			$localWhere = array();
@@ -460,51 +447,30 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 
 		// Page List
 		$pageList = array();
-
-		$pageSchemes = array(
-			// First Pages
-			array(
-				'min' => 1,
-				'max' => min($pages, $this->pagebrowser['pagesFirst'])
-			),
-			// Last 3
-			array(
-				'min' => max(1, ($pages - ($this->pagebrowser['pagesLast']))),
-				'max' => $pages
-			),
-			// ActPage +- 2
-			array(
-				'min' => max(1, ($actPage - ($this->pagebrowser['pagesAroundAct']))),
-				'max' => min($pages, ($actPage + ($this->pagebrowser['pagesAroundAct'])))
-			),
-			// Each 10
-			array(
-				'min' => $this->pagebrowser['pagesEach'],
+		$pageSchemes = array(array('min' => 1,
+			'max' => min($pages, $this->pagebrowser['pagesFirst'])),
+			array('min' => max(1, ($pages - ($this->pagebrowser['pagesLast']))),
+				'max' => $pages),
+			array('min' => max(1, ($actPage - ($this->pagebrowser['pagesAroundAct']))),
+				'max' => min($pages, ($actPage + ($this->pagebrowser['pagesAroundAct'])))),
+			array('min' => $this->pagebrowser['pagesEach'],
 				'max' => $pages,
-				'iterate' => $this->pagebrowser['pagesEach']
-			)
-		);
-
+				'iterate' => $this->pagebrowser['pagesEach']));
 		foreach ($pageSchemes as $pageScheme) {
 			$iterate = max(1, $pageScheme['iterate']);
 			for ($i = $pageScheme['min']; $i <= $pageScheme['max']; $i = $i + $iterate) {
 				$pageList[] = $i;
 			}
 		}
-
 		$pageList = array_unique($pageList);
 		sort($pageList);
 
-		$typolinkConf = array(
-			'parameter' => $GLOBALS['TSFE']->id,
+		$typolinkConf = array('parameter' => $GLOBALS['TSFE']->id,
 			'addQueryString' => 1,
-			'addQueryString.' => array(
-				'method' => 'GET,POST',
-				'exclude' => $this->prefixId . '|page',
-			),
-		);
+			'addQueryString.' => array('method' => 'GET,POST',
+				'exclude' => $this->prefixId . '|page',),);
 
-		$content = '<ul class="pagebrowser clearfix">';
+		$content = '<ul class="pagebrowser">';
 		foreach ($pageList as $page) {
 			$content .= '<li>';
 
@@ -543,10 +509,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 			$markerArray['###CATEGORIES###'] .= $this->renderRecord($category, $this->getFieldsConf('category'), $this->categorytemplate);
 		}
 
-		return $this->cObj->substituteMarkerArray(
-			$this->cObj->getSubpart($this->template, '###CATMENUVIEW###'),
-			$markerArray
-		);
+		return $this->cObj->substituteMarkerArray($this->cObj->getSubpart($this->template, '###CATMENUVIEW###'), $markerArray);
 
 	}
 
@@ -749,11 +712,7 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 					$where = 'category = ' . $fieldsConf['uid'] . ' AND ' . 'pid IN (' . $this->pids . ') ' . $this->cObj->enableFields('tx_multicatalog_category');
 					$subcategories = $this->fetchLocalized(TRUE, '*', 'tx_multicatalog_category', $where, '', 'sorting ASC');
 					foreach ($subcategories as $subcategory) {
-						$subcategoryFieldConf = array(
-							'name.' => array(
-								'link' => 1
-							)
-						);
+						$subcategoryFieldConf = array('name.' => array('link' => 1));
 						$subcategoryMarkers = $this->recordAndFieldsConfToMarkerArray($subcategory, $subcategoryFieldConf);
 						$value .= '<li>' . $subcategoryMarkers['###NAME###'] . '</li>';
 					}
@@ -764,22 +723,14 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				 * If this field is defined, the indexDocTitle for indexed_search is filled with its content
 				 */
 				if ($field == 'indexDocTitle') {
-					$GLOBALS['TSFE']->indexedDocTitle = $this->local_cObj->stdWrap(
-						$value,
-						$fieldsConf[$field . '.']
-					);
+					$GLOBALS['TSFE']->indexedDocTitle = $this->local_cObj->stdWrap($value, $fieldsConf[$field . '.']);
 				}
 
-				// link if value.link = 1
+				// link if [field].link = 1
 				if ($this->local_cObj->stdWrap($fieldsConf[$field . '.']['link'], $fieldsConf[$field . '.']['link.']) == 1) {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->linkTargetPid;
 					$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[' . $this->linkVarName . ']=' . $record['uid'];
-					if (
-						$this->local_cObj->stdWrap(
-							$fieldsConf[$field . '.']['link.']['includeCategoryParameter'],
-							$fieldsConf[$field . '.']['link.']['includeCategoryParameter.']
-						) == 1 &&
-						$this->linkVarName == 'uid'
+					if ($this->local_cObj->stdWrap($fieldsConf[$field . '.']['link.']['includeCategoryParameter'], $fieldsConf[$field . '.']['link.']['includeCategoryParameter.']) == 1 && $this->linkVarName == 'uid'
 					) {
 						$fieldsConf[$field . '.']['typolink.']['additionalParams'] .= '&' . $this->prefixId . '[cat]=' . $record['categoriesArray'][0];
 					}
@@ -790,22 +741,14 @@ class tx_multicatalog_pi1 extends tslib_pibase {
 				if ($this->local_cObj->stdWrap($fieldsConf[$field . '.']['backlink'], $fieldsConf[$field . '.']['backlink.']) == 1) {
 					$fieldsConf[$field . '.']['typolink.']['parameter'] = $this->listPid;
 
-					if (
-						$this->local_cObj->stdWrap(
-							$fieldsConf[$field . '.']['backlink.']['includeCategoryParameter'],
-							$fieldsConf[$field . '.']['backlink.']['includeCategoryParameter.']
-						) == 1 &&
-						$record['category']
+					if ($this->local_cObj->stdWrap($fieldsConf[$field . '.']['backlink.']['includeCategoryParameter'], $fieldsConf[$field . '.']['backlink.']['includeCategoryParameter.']) == 1 && $record['category']
 					) {
 						$fieldsConf[$field . '.']['typolink.']['additionalParams'] = '&' . $this->prefixId . '[cat]=' . $record['categoriesArray'][0];
 					}
 					$fieldsConf[$field . '.']['typolink.']['useCacheHash'] = TRUE;
 				}
 
-				$markerArray['###' . strtoupper($field) . '###'] = $this->local_cObj->stdWrap(
-					$value,
-					$fieldsConf[$field . '.']
-				);
+				$markerArray['###' . strtoupper($field) . '###'] = $this->local_cObj->stdWrap($value, $fieldsConf[$field . '.']);
 			}
 		}
 
